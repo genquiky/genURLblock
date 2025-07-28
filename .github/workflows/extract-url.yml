@@ -50,7 +50,7 @@ jobs:
                     extracted_urls.append(extracted_url)
 
             # Save the extracted URLs to a .txt file
-            with open('extracted_urls.txt', 'w') as file:
+            with open('urls_blocklist.txt', 'w') as file:
                 for url in extracted_urls:
                     file.write(f"{url}\n")
 
@@ -72,8 +72,8 @@ jobs:
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add extracted_urls.txt
-        git commit -m "Add extracted_urls.txt with extracted URLs"
+        git add urls_blocklist.txt
+        git commit -m "Add urls_blocklist.txt with extracted URLs"
         git push
       env:
         GITHUB_TOKEN: ${{ secrets.URL_BLOCKLIST2_TOKEN }}
