@@ -2,6 +2,7 @@
     "name": "Active Malware Blocklist",
     "description": "==================================\nActive database dump, contains online (active) malware URLs only\n---------------------------------------------\nUpdated from Urlhaus.Abuse.ch for Little Snitch\nMaintainer:   gen\nExpires:        1 day (midnight UTC)\n==================================",
     "denied-remote-domains": [
+        "42.228.84.94:59159/bin.sh",
         "113.206.100.236:55820/bin.sh",
         "182.126.119.230:58590/bin.sh",
         "https://sso.believersfaith.com/bin/support.client.exe?i=&e=Support&y=Guest&r=",
