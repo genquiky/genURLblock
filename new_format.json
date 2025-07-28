@@ -1,7 +1,10 @@
 {
-    "name": "Fabston's Malicious Blocklist",
-    "description": "==================================\n                  Malicious URL Blocklist\n---------------------------------------------\nEntries:         151,358\nUpdated:      Nov 20, 2024, 03:00 PM (UTC)\nSize:             4.5M\nMaintainer:   fabston\nExpires:        1 day (update frequency)\nLicense:       GPL-3.0\n==================================",
+    "name": "URLhaus's Malware URL Blocklist",
     "denied-remote-domains": [
+        "112.248.82.212:34824/i",
+        "42.53.129.83:34473/i",
+        "https://toolsswift.com/runtimebroker.exe",
+        "222.136.82.108:45328/i",
         "175.173.118.131:45245/i",
         "222.136.82.108:45328/bin.sh",
         "https://pngup.com/ZnJi/output_image.bmp",
