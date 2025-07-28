@@ -1,5 +1,6 @@
 {
-    "name": "URLhaus's Malware URL Blocklist",
+    "name": "Active Malware Malicious Blocklist",
+    "description": "==================================\n                  Active database dump, contains online (active) malware URLs only: Blocklist\n---------------------------------------------\nUpdated from urlhaus.abuse.ch for Little Snitch\nMaintainer:   gen\nExpires:        1 day (update frequency every day midnight UTC)\n==================================",
     "denied-remote-domains": [
         "112.248.82.212:34824/i",
         "42.53.129.83:34473/i",
