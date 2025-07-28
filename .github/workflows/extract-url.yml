@@ -44,7 +44,8 @@ jobs:
                     extracted_urls.append(extracted_url)
             # Create the new format with header
             new_format = {
-                "name": "URLhaus's Malware URL Blocklist",
+                "name": Active Malware Malicious Blocklist",
+                "description": "==================================\n                  Active database dump, contains online (active) malware URLs only: Blocklist\n---------------------------------------------\nUpdated from urlhaus.abuse.ch for Little Snitch\nMaintainer:   gen\nExpires:        1 day (update frequency every day midnight UTC)\n==================================",
                 "denied-remote-domains": extracted_urls
             }
             # Save the new format to a .json file
