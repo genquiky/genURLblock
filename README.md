@@ -2,7 +2,7 @@
 
 This document is an active database dump from URLhaus, which includes only online (active) malware URLs. The data is formatted for use with the Little Snitch application and contains one URL per line. This format is particularly useful if you want to utilise the URLhaus dataset as an Indicator of Compromise (IOC). You can compare these URLs against specific log files from your security perimeter, such as web proxy logs. Additionally, this list can serve as a blocklist with a low false-positive rate.
 
-The dumps are generated every 5 minutes from the source DB (do not fetch them more frequently than every 5 minutes), but the formatted JSON file is generated daily.
+The dumps are generated every 5 minutes from the source DB, but the formatted JSON file is generated daily.
 
 * The filter is only compatible with [Little Snitch](https://www.obdev.at/products/littlesnitch/index.html) for Mac.
 * Source Database [URLhaus](https://urlhaus.abuse.ch)
