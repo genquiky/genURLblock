@@ -1,8 +1,6 @@
 name: Extract URLs
 
 on:
-  schedule:
-    - cron: '0 0 * * *'
   push:
     branches:
       - main
@@ -24,40 +22,36 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install requests
-
     - name: Fetch JSON from URL and extract URLs
       run: |
         python - <<EOF
         import requests
-
+        import json
         # URL of the JSON data
         url = 'https://urlhaus.abuse.ch/downloads/json_recent/'  # Replace with the actual URL
-
         try:
             # Fetch the JSON data from the URL
             response = requests.get(url)
             response.raise_for_status()  # Raise an exception for HTTP errors
             data = response.json()
-
             # Initialize a list to hold the extracted URLs
             extracted_urls = []
-
             # Iterate over all entries in the JSON data
             for key, entries in data.items():
                 for entry in entries:
                     # Extract the "url" field and remove the "http://" part
                     extracted_url = entry["url"].replace("http://", "")
                     extracted_urls.append(extracted_url)
-
-            # Save the extracted URLs to a .txt file
-            with open('urls_blocklist.txt', 'w') as file:
-                for url in extracted_urls:
-                    file.write(f"{url}\n")
-
-            # Print the extracted URLs
-            for url in extracted_urls:
-                print(url)
-
+            # Create the new format with header
+            new_format = {
+                "name": "URLhaus's Malware URL Blocklist",
+                "denied-remote-domains": extracted_urls
+            }
+            # Save the new format to a .json file
+            with open('new_format.json', 'w') as file:
+                json.dump(new_format, file, indent=4)
+            # Print the new format
+            print(json.dumps(new_format, indent=4))
         except requests.exceptions.RequestException as e:
             print(f"Error fetching JSON data: {e}")
         except json.JSONDecodeError as e:
@@ -67,13 +61,12 @@ jobs:
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
         EOF
-
     - name: Commit and push the new format file
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add urls_blocklist.txt
-        git commit -m "Add urls_blocklist.txt with extracted URLs"
+        git add new_format.json
+        git commit -m "Add new_format.json with extracted URLs"
         git push
       env:
         GITHUB_TOKEN: ${{ secrets.URL_BLOCKLIST2_TOKEN }}
