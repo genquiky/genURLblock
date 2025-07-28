@@ -1,1 +1,2 @@
-Active database dump from URLhaus, contains online (active) malware URLs only formated for Little Snitch app.
+Active database dump from URLhaus, containing only online (active) malware URLs, formatted for the Little Snitch app.
+It does not contain anything other than one URL per line, which is helpful if you want to use the URLhaus dataset as an IOC (Indicator Of Compromise). You can match them against specific log files of your security perimeter, for example, web proxy logs. You can also use it as a blocklist with a low false-positive rate.
