@@ -32,28 +32,44 @@ jobs:
         # URL of the JSON data
         url = 'https://urlhaus.abuse.ch/downloads/json_recent/'  # Replace with the actual URL
 
-        # Fetch the JSON data from the URL
-        response = requests.get(url)
-        data = response.json()
+        try:
+            # Fetch the JSON data from the URL
+            response = requests.get(url)
+            response.raise_for_status()  # Raise an exception for HTTP errors
+            data = response.json()
 
-        # Initialize a list to hold the extracted URLs
-        extracted_urls = []
+            # Initialize a list to hold the extracted URLs
+            extracted_urls = []
 
-        # Iterate over all entries in the JSON data
-        for key, entries in data.items():
-            for entry in entries:
-                # Extract the "url" field and remove the "http://" part
-                extracted_url = entry["url"].replace("http://", "")
-                extracted_urls.append(extracted_url)
+            # Iterate over all entries in the JSON data
+            for key, entries in data.items():
+                for entry in entries:
+                    # Extract the "url" field and remove the "http://" part
+                    extracted_url = entry["url"].replace("http://", "")
+                    extracted_urls.append(f'"{extracted_url}"')
 
-        # Save the extracted URLs to a .txt file
-        with open('new_format.txt', 'w') as file:
-            for extracted_url in extracted_urls:
-                file.write(extracted_url + '\n')
+            # Create the new format with header
+            new_format = {
+                "name": "Fabston's Malicious Blocklist",
+                "description": "==================================\n                  Malicious URL Blocklist\n---------------------------------------------\nEntries:         151,358\nUpdated:      Nov 20, 2024, 03:00 PM (UTC)\nSize:             4.5M\nMaintainer:   fabston\nExpires:        1 day (update frequency)\nLicense:       GPL-3.0\n==================================",
+                "denied-remote-domains": extracted_urls
+            }
 
-        # Print the extracted URLs
-        for extracted_url in extracted_urls:
-            print(extracted_url)
+            # Save the new format to a .json file
+            with open('new_format.json', 'w') as file:
+                json.dump(new_format, file, indent=4)
+
+            # Print the new format
+            print(json.dumps(new_format, indent=4))
+
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching JSON data: {e}")
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON data: {e}")
+        except KeyError as e:
+            print(f"Error accessing JSON data: {e}")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
         EOF
 
     - name: Commit and push the new format file
