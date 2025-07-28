@@ -70,4 +70,4 @@ jobs:
         git commit -m "Add new_format.json with extracted URLs"
         git push
       env:
-        GITHUB_TOKEN: ${{ secrets.URL_BLOCKLIST2_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
