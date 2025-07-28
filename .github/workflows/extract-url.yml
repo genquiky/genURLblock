@@ -46,7 +46,7 @@ jobs:
                 for entry in entries:
                     # Extract the "url" field and remove the "http://" part
                     extracted_url = entry["url"].replace("http://", "")
-                    extracted_urls.append(f'"{extracted_url}"')
+                    extracted_urls.append(extracted_url)
 
             # Create the new format with header
             new_format = {
