@@ -1,6 +1,8 @@
 name: Extract URLs
 
 on:
+  schedule:
+    - cron: '0 0 * * *'
   push:
     branches:
       - main
@@ -27,7 +29,6 @@ jobs:
       run: |
         python - <<EOF
         import requests
-        import json
 
         # URL of the JSON data
         url = 'https://urlhaus.abuse.ch/downloads/json_recent/'  # Replace with the actual URL
@@ -48,19 +49,14 @@ jobs:
                     extracted_url = entry["url"].replace("http://", "")
                     extracted_urls.append(extracted_url)
 
-            # Create the new format with header
-            new_format = {
-                "name": "Fabston's Malicious Blocklist",
-                "description": "==================================\n                  Malicious URL Blocklist\n---------------------------------------------\nEntries:         151,358\nUpdated:      Nov 20, 2024, 03:00 PM (UTC)\nSize:             4.5M\nMaintainer:   fabston\nExpires:        1 day (update frequency)\nLicense:       GPL-3.0\n==================================",
-                "denied-remote-domains": extracted_urls
-            }
+            # Save the extracted URLs to a .txt file
+            with open('extracted_urls.txt', 'w') as file:
+                for url in extracted_urls:
+                    file.write(f"{url}\n")
 
-            # Save the new format to a .json file
-            with open('new_format.json', 'w') as file:
-                json.dump(new_format, file, indent=4)
-
-            # Print the new format
-            print(json.dumps(new_format, indent=4))
+            # Print the extracted URLs
+            for url in extracted_urls:
+                print(url)
 
         except requests.exceptions.RequestException as e:
             print(f"Error fetching JSON data: {e}")
@@ -76,8 +72,8 @@ jobs:
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add new_format.json
-        git commit -m "Add new_format.json with extracted URLs"
+        git add extracted_urls.txt
+        git commit -m "Add extracted_urls.txt with extracted URLs"
         git push
       env:
         GITHUB_TOKEN: ${{ secrets.URL_BLOCKLIST2_TOKEN }}
