@@ -3,6 +3,8 @@
     <a href="https://github.com/genquiky/genURLblock/commits/main"><img src="https://img.shields.io/github/commit-activity/m/genquiky/genURLblock" alt="commit activity"></a>
 </p>
 
+----
+
 ### URLhaus block list for Little Snitch
 
 This document is an active database dump from URLhaus, which includes only online (active) malware URLs. The data is formatted for use with the Little Snitch application and contains one URL per line. This format is particularly useful if you want to utilise the URLhaus dataset as an Indicator of Compromise (IOC). You can compare these URLs against specific log files from your security perimeter, such as web proxy logs. Additionally, this list can serve as a blocklist with a low false-positive rate.
