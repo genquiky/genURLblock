@@ -64,4 +64,4 @@ jobs:
         git commit -m "Add new_format.txt with extracted URLs"
         git push
       env:
-        GITHUB_TOKEN: ${{ secrets.URL_BLOCKLIST_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.URL_BLOCKLIST2_TOKEN }}
