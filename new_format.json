@@ -2,6 +2,13 @@
     "name": "Active Malware Blocklist",
     "description": "==================================\nActive database dump, contains online (active) malware URLs only\n---------------------------------------------\nUpdated from Urlhaus.Abuse.ch for Little Snitch\nMaintainer:   gen\nExpires:        1 day (midnight UTC)\n==================================",
     "denied-remote-domains": [
+        "182.117.29.229:58432/bin.sh",
+        "59.97.250.195:59219/i",
+        "125.41.240.238:58032/i",
+        "117.248.26.142:36612/bin.sh",
+        "94.255.232.166:59946/bin.sh",
+        "123.12.181.217:39686/bin.sh",
+        "42.6.128.51:51014/i",
         "117.251.184.212:52220/bin.sh",
         "125.41.240.238:58032/bin.sh",
         "117.235.125.231:53490/bin.sh",
