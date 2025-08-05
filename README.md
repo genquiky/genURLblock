@@ -1,6 +1,7 @@
 <p align="center">
-    <img src="https://github.com/genquiky/fiji-macros/blob/main/items/fiji-logo.jpg" alt="logo" width="140" />
+    <img src="https://github.com/genquiky/genURLblock/blob/main/items/logos.jpg" alt="logo" height="120" />
 </p>
+
 
 ### URLhaus block list for Little Snitch
 
