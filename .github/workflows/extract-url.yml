@@ -2,7 +2,7 @@ name: URLhaus to Little Snitch
 
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 8,20 * * *"
   push:
     branches:
       - main
