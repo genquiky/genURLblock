@@ -1,6 +1,6 @@
 {
     "name": "Active Malware Blocklist",
-    "description": "==================================\n                  Active Malware Blocklist\n---------------------------------------------\nUpdated:      2026-09-24 17:18 UTC\nMaintainer:   github.com/genquiky/genURLblock\n==================================",
+    "description": "==================================\n                  Active Malware Blocklist\n---------------------------------------------\nUpdated:      2026-09-24 17:19 UTC\nMaintainer:   github.com/genquiky/genURLblock\n==================================",
     "denied-remote-domains": [
         "ftp://185.93.89.72/ftpget",
         "ftp://41.216.189.236/2.sh",
