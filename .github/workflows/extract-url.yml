@@ -2,11 +2,11 @@ name: URLhaus to Little Snitch
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs daily at midnight
+    - cron: "0 0 * * *"
   push:
     branches:
       - main
-  workflow_dispatch: # Allows manual triggering
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -29,69 +29,102 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests
+          python -m pip install requests
 
-      - name: Fetch API data and extract domains
+      - name: Fetch URLhaus data and create Little Snitch JSON
         env:
           API_KEY: ${{ secrets.URL_BLOCKLIST2_TOKEN }}
         run: |
           python - <<'PY'
+          import json
           import os
           import sys
+
           import requests
-          from urllib.parse import urlparse
 
           api_key = os.environ.get("API_KEY")
+
           if not api_key:
               print("API_KEY is not configured")
               sys.exit(1)
 
           url = "https://urlhaus-api.abuse.ch/v1/urls/recent/"
+
           headers = {
               "Auth-Key": api_key,
               "User-Agent": "LittleSnitch-Updater-via-GitHub",
+              "Accept": "application/json",
           }
 
           try:
               print("Fetching data from URLhaus API...")
-              response = requests.get(url, headers=headers, timeout=30)
+
+              response = requests.get(
+                  url,
+                  headers=headers,
+                  timeout=60,
+              )
               response.raise_for_status()
+
               data = response.json()
+              entries = data.get("urls", [])
 
-              domains = set()
+              # Keep the complete URL/path rather than only the hostname.
+              # This matches the existing Little Snitch format.
+              blocked_urls = {
+                  entry.get("url", "").strip()
+                  for entry in entries
+                  if entry.get("url", "").strip()
+              }
 
-              for entry in data.get("urls", []):
-                  full_url = entry.get("url", "")
-                  hostname = urlparse(full_url).hostname
-                  if hostname:
-                      domains.add(hostname.lower())
+              sorted_urls = sorted(blocked_urls)
 
-              sorted_domains = sorted(domains)
+              little_snitch_rules = {
+                  "name": "Active Malware Blocklist",
+                  "description": (
+                      "Active database dump containing online malware URLs "
+                      "from URLhaus. Automatically generated for Little Snitch."
+                  ),
+                  "denied-remote-domains": sorted_urls,
+              }
 
-              with open("blocked_domains.txt", "w", encoding="utf-8") as file:
-                  file.write("# URLhaus Malware Domain Blocklist\n")
-                  file.write("# Automatically updated via API\n")
-                  for domain in sorted_domains:
-                      file.write(f"{domain}\n")
+              with open("new_format.json", "w", encoding="utf-8") as file:
+                  json.dump(
+                      little_snitch_rules,
+                      file,
+                      indent=4,
+                      ensure_ascii=False,
+                  )
+                  file.write("\n")
 
-              print(f"Successfully extracted {len(sorted_domains)} unique domains.")
+              print(
+                  f"Successfully wrote {len(sorted_urls)} "
+                  "Little Snitch rules to new_format.json."
+              )
 
           except requests.HTTPError as error:
               print(f"URLhaus API request failed: {error}")
-              if 'response' in locals():
+
+              if "response" in locals():
                   print(response.text[:500])
+
               sys.exit(1)
+
+          except (ValueError, KeyError) as error:
+              print(f"Invalid URLhaus response: {error}")
+              sys.exit(1)
+
           except Exception as error:
               print(f"Error: {error}")
               sys.exit(1)
           PY
 
-      - name: Commit and push
+      - name: Commit and push updated blocklist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -100,14 +133,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add blocked_domains.txt
+          git add new_format.json
 
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
           fi
 
-          git commit -m "Update blocklist from URLhaus API"
+          git commit -m "Update Little Snitch blocklist"
 
           git fetch origin main
           git rebase origin/main
