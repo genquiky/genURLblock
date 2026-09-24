@@ -57,7 +57,7 @@ jobs:
           # This URL returns plain text, not JSON.
           url = (
               "https://urlhaus-api.abuse.ch/v2/files/exports/"
-              f"{export_token}/urls_full.txt"
+              f"{export_token}/urls_online.txt"
           )
 
           headers = {
@@ -77,7 +77,7 @@ jobs:
 
               blocked_urls = set()
 
-              # urls_full.txt contains comments and one URL per line.
+              # urls_online.txt contains comments and one URL per line.
               for line in response.text.splitlines():
                   line = line.strip()
 
@@ -101,7 +101,7 @@ jobs:
                       "URLhaus Active Malware Blocklist\n"
                       "----------------------------------------------\n"
                       f"Updated:      {updated_at}\n"
-                      "Database:      "urls_full.txt" dump\n"
+                      "Database:      "urls_online.txt" dump\n"
                       "Maintainer:   github.com/genquiky\n"
                       "Expires:        every 8 hours\n"
                       "=================================="
