@@ -26,7 +26,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests
 
-    - name: Fetch API data and extract domains
+        - name: Fetch API data and extract domains
       env:
         API_KEY: ${{ secrets.URL_BLOCKLIST2_TOKEN }}
       run: |
@@ -49,14 +49,15 @@ jobs:
 
         try:
             print("Fetching data from URLhaus API...")
-            response = requests.post(url, headers=headers, timeout=30)
+            response = requests.get(url, headers=headers, timeout=30)
             response.raise_for_status()
             data = response.json()
 
             domains = set()
 
             for entry in data.get("urls", []):
-                hostname = urlparse(entry.get("url", "")).hostname
+                full_url = entry.get("url", "")
+                hostname = urlparse(full_url).hostname
                 if hostname:
                     domains.add(hostname.lower())
 
