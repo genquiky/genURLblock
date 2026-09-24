@@ -1,6 +1,6 @@
 {
     "name": "URLhaus Malware Blocklist",
-    "description": "==================================\nURLhaus 'Active' Malware Blocklist\n----------------------------------------------\nUpdated:      2026-09-24 18:56 UTC\nDatabase:     urls_online.txt dump\nMaintainer:   github.com/genquiky\nExpires:      every 8 hours\n==================================",
+    "description": "==================================\nURLhaus 'Active' Malware Blocklist\n----------------------------------------------\nUpdated:      2026-09-24 18:57 UTC\nDatabase:     urls_online.txt dump\nMaintainer:   github.com/genquiky\nExpires:        every 8 hours\n==================================",
     "denied-remote-domains": [
         "http://1.92.101.221/pty3",
         "http://1.92.136.152/pty10",
