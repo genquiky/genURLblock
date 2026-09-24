@@ -44,6 +44,7 @@ jobs:
           import json
           import os
           import sys
+          from datetime import datetime, timezone
 
           import requests
 
@@ -90,11 +91,16 @@ jobs:
               if not sorted_urls:
                   print("URLhaus returned no URLs; refusing to overwrite the blocklist")
                   sys.exit(1)
+              
+              updated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
               little_snitch_rules = {
                   "name": "Active Malware Blocklist",
                   "description": (
-                      "---------------------------------------------\nUpdated:      Every 8 hours (8AM, 8PM)\n=================================="
+                      "==================================\n                  Active Malware Blocklist\n---------------------------------------------\n"
+                      f"Updated:      {updated_at}\n"
+                      "Maintainer:   github.com/genquiky/genURLblock\n"
+                      "=================================="
                   ),
                   "denied-remote-domains": sorted_urls,
               }
