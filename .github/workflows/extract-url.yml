@@ -97,7 +97,7 @@ jobs:
               little_snitch_rules = {
                   "name": "Active Malware Blocklist",
                   "description": (
-                      "==================================\n                  URLhaus Active Malware Blocklist\n"
+                      "==================================\n           URLhaus Active Malware Blocklist\n"
                       "---------------------------------------------\n"
                       f"Updated:      {updated_at}\n"
                       "Maintainer:   github.com/genquiky\n"
