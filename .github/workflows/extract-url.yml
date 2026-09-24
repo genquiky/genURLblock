@@ -1,76 +1,86 @@
-name: Extract URLs
+name: URLhaus to Little Snitch
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *' # Runs daily at midnight
   push:
     branches:
       - main
+  workflow_dispatch: # Allows manual triggering
 
 jobs:
-  extract-urls:
+  update-blocklist:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.8'
+        python-version: '3.10'
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install requests
-    - name: Fetch JSON from URL and extract URLs
+
+    - name: Fetch API data and extract domains
+      env:
+        API_KEY: ${{ secrets.URLHAUS_API_KEY }}
       run: |
         python - <<EOF
         import requests
-        import json
-        # URL of the JSON data
-        url = 'https://urlhaus.abuse.ch/downloads/json_recent/'  # Replace with the actual URL
+        import os
+        from urllib.parse import urlparse
+
+        # URLhaus API endpoint for recent malware URLs
+        # We use the API key in the header for authentication
+        url = "https://urlhaus-api.abuse.ch/v1/urls/recent/"
+        headers = {"User-Agent": "LittleSnitch-Updater-via-GitHub"}
+        
+        # The API allows query parameters for the key or auth headers
+        params = {"key": os.environ.get("API_KEY")}
+
         try:
-            # Fetch the JSON data from the URL
-            response = requests.get(url)
-            response.raise_for_status()  # Raise an exception for HTTP errors
+            print("Fetching data from URLhaus API...")
+            response = requests.get(url, params=params, headers=headers, timeout=30)
+            response.raise_for_status()
             data = response.json()
-            # Initialize a list to hold the extracted URLs
-            extracted_urls = []
-            # Iterate over all entries in the JSON data
-            for key, entries in data.items():
-                for entry in entries:
-                    # Extract the "url" field and remove the "http://" part
-                    extracted_url = entry["url"].replace("http://", "")
-                    extracted_urls.append(extracted_url)
-            # Create the new format with header
-            new_format = {
-                "name": "Active Malware Blocklist",
-                "description": "==================================\nActive database dump, contains online (active) malware URLs only\n---------------------------------------------\nUpdated from Urlhaus.Abuse.ch for Little Snitch\nMaintainer:   gen\nExpires:        1 day (midnight UTC)\n==================================",
-                "denied-remote-domains": extracted_urls
-            }
-            # Save the new format to a .json file
-            with open('new_format.json', 'w') as file:
-                json.dump(new_format, file, indent=4)
-            # Print the new format
-            print(json.dumps(new_format, indent=4))
-        except requests.exceptions.RequestException as e:
-            print(f"Error fetching JSON data: {e}")
-        except json.JSONDecodeError as e:
-            print(f"Error decoding JSON data: {e}")
-        except KeyError as e:
-            print(f"Error accessing JSON data: {e}")
+
+            domains = set()
+            
+            # API returns a dictionary with a 'urls' list
+            urls_list = data.get("urls", [])
+            
+            for entry in urls_list:
+                full_url = entry.get("url", "")
+                hostname = urlparse(full_url).hostname
+                if hostname:
+                    domains.add(hostname.lower())
+
+            sorted_domains = sorted(list(domains))
+
+            with open('blocked_domains.txt', 'w') as file:
+                file.write("# URLhaus Malware Domain Blocklist\n")
+                file.write("# Automatically updated via API\n")
+                for domain in sorted_domains:
+                    file.write(f"{domain}\n")
+
+            print(f"Successfully extracted {len(sorted_domains)} unique domains.")
+
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            print(f"Error: {e}")
+            exit(1)
         EOF
-    - name: Commit and push the new format file
+
+    - name: Commit and push
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add new_format.json
-        git commit -m "Add new_format.json with extracted URLs"
-        git pull origin main --rebase
+        git add blocked_domains.txt
+        git commit -m "Update blocklist from URLhaus API" || echo "No changes to commit"
         git push
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
