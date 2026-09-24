@@ -54,7 +54,7 @@ jobs:
               sys.exit(1)
 
           # url = "https://urlhaus-api.abuse.ch/v1/urls/recent/"
-          url = "https://urlhaus-api.abuse.ch/v2/files/exports/7351874a170f1b6eeb6f3ca698bd2132fd177c878096e8da/online.json" 
+          url = "https://urlhaus-api.abuse.ch/v2/files/exports/7351874a170f1b6eeb6f3ca698bd2132fd177c878096e8da/recent.json" 
 
           headers = {
               "Auth-Key": api_key,
