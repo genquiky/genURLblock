@@ -94,8 +94,7 @@ jobs:
               little_snitch_rules = {
                   "name": "Active Malware Blocklist",
                   "description": (
-                      "Active database dump containing full malware URLs paths "
-                      "from URLhaus. Automatically generated for Little Snitch."
+                      "---------------------------------------------\nUpdated:      Every 8 hours (8AM, 8PM)\n=================================="
                   ),
                   "denied-remote-domains": sorted_urls,
               }
