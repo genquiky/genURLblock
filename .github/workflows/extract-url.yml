@@ -76,7 +76,7 @@ jobs:
 
               blocked_urls = set()
 
-              # urls_recent.txt contains comments and one URL per line.
+              # urls_full.txt contains comments and one URL per line.
               for line in response.text.splitlines():
                   line = line.strip()
 
@@ -94,7 +94,7 @@ jobs:
               little_snitch_rules = {
                   "name": "Active Malware Blocklist",
                   "description": (
-                      "Active database dump containing online malware URLs "
+                      "Active database dump containing full malware URLs paths "
                       "from URLhaus. Automatically generated for Little Snitch."
                   ),
                   "denied-remote-domains": sorted_urls,
