@@ -47,23 +47,25 @@ jobs:
 
           import requests
 
-          api_key = os.environ.get("API_KEY")
+          export_token = os.environ.get("API_KEY")
 
-          if not api_key:
+          if not export_token:
               print("API_KEY is not configured")
               sys.exit(1)
 
-          # url = "https://urlhaus-api.abuse.ch/v1/urls/recent/"
-          url = "https://urlhaus-api.abuse.ch/v2/files/exports/7351874a170f1b6eeb6f3ca698bd2132fd177c878096e8da/urls_recent.txt" 
+          # This URL returns plain text, not JSON.
+          url = (
+              "https://urlhaus-api.abuse.ch/v2/files/exports/"
+              f"{export_token}/urls_recent.txt"
+          )
 
           headers = {
-              "Auth-Key": api_key,
               "User-Agent": "LittleSnitch-Updater-via-GitHub",
-              "Accept": "application/json",
+              "Accept": "text/plain",
           }
 
           try:
-              print("Fetching data from URLhaus API...")
+              print("Fetching data from URLhaus...")
 
               response = requests.get(
                   url,
@@ -72,18 +74,22 @@ jobs:
               )
               response.raise_for_status()
 
-              data = response.json()
-              entries = data.get("urls", [])
+              blocked_urls = set()
 
-              # Keep the complete URL/path rather than only the hostname.
-              # This matches the existing Little Snitch format.
-              blocked_urls = {
-                  entry.get("url", "").strip()
-                  for entry in entries
-                  if entry.get("url", "").strip()
-              }
+              # urls_recent.txt contains comments and one URL per line.
+              for line in response.text.splitlines():
+                  line = line.strip()
+
+                  if not line or line.startswith("#"):
+                      continue
+
+                  blocked_urls.add(line)
 
               sorted_urls = sorted(blocked_urls)
+
+              if not sorted_urls:
+                  print("URLhaus returned no URLs; refusing to overwrite the blocklist")
+                  sys.exit(1)
 
               little_snitch_rules = {
                   "name": "Active Malware Blocklist",
@@ -109,15 +115,12 @@ jobs:
               )
 
           except requests.HTTPError as error:
-              print(f"URLhaus API request failed: {error}")
-
-              if "response" in locals():
-                  print(response.text[:500])
-
+              print(f"URLhaus request failed: {error}")
+              print(response.text[:500])
               sys.exit(1)
 
-          except (ValueError, KeyError) as error:
-              print(f"Invalid URLhaus response: {error}")
+          except requests.RequestException as error:
+              print(f"Network error while contacting URLhaus: {error}")
               sys.exit(1)
 
           except Exception as error:
