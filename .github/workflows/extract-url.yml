@@ -56,7 +56,7 @@ jobs:
           # This URL returns plain text, not JSON.
           url = (
               "https://urlhaus-api.abuse.ch/v2/files/exports/"
-              f"{export_token}/urls_recent.txt"
+              f"{export_token}/urls_full.txt"
           )
 
           headers = {
