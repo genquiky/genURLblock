@@ -102,7 +102,7 @@ jobs:
                       "----------------------------------------------\n"
                       f"Updated:      {updated_at}\n"
                       "Maintainer:   github.com/genquiky\n"
-                      "Expires:       every 8 hours\n"
+                      "Expires:        every 8 hours\n"
                       "=================================="
                   ),
                   "denied-remote-domains": sorted_urls,
