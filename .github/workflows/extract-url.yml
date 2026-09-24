@@ -97,9 +97,11 @@ jobs:
               little_snitch_rules = {
                   "name": "Active Malware Blocklist",
                   "description": (
-                      "==================================\n                  Active Malware Blocklist\n---------------------------------------------\n"
+                      "==================================\n                  URLhaus Active Malware Blocklist\n"
+                      "---------------------------------------------\n"
                       f"Updated:      {updated_at}\n"
-                      "Maintainer:   github.com/genquiky/genURLblock\n"
+                      "Maintainer:   github.com/genquiky\n"
+                      "Expires:      every 8 hours"
                       "=================================="
                   ),
                   "denied-remote-domains": sorted_urls,
