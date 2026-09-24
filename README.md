@@ -5,7 +5,7 @@
 
 ### URLhaus block list for Little Snitch
 
-This document is an active database dump from [URLhaus](https://urlhaus.abuse.ch), which includes a dump of all malware URLs known to URLhaus. The data is formatted for use with the Little Snitch application and contains one URL per line. This format is particularly useful if you want to utilise the dataset as an Indicator of Compromise (IOC). You can compare these URLs against specific log files from your security perimeter, such as web proxy logs. Additionally, this list can serve as a blocklist with a low false-positive rate.
+This repo contains a database dump from [URLhaus](https://urlhaus.abuse.ch), which contains online (active) malware URLs, striping out the "dead" domains and having the same level of protection but with a much smaller, faster file. The data is formatted and cleaned for use with the Little Snitch application containing one full path URL per line. This format is particularly useful if you want to utilise the dataset as an Indicator of Compromise (IOC). You can compare these URLs against specific log files from your security perimeter, such as web proxy logs. Additionally, this list can serve as a blocklist with a low false-positive rate.
 
 The dumps are generated every 5 minutes from the source DB, but the formatted JSON file is generated every 8 hours.
 
