@@ -95,12 +95,13 @@ jobs:
               updated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
               little_snitch_rules = {
-                  "name": "Active Malware Blocklist",
+                  "name": "URLhaus Malware Blocklist",
                   "description": (
                       "==================================\n"
                       "URLhaus Active Malware Blocklist\n"
                       "----------------------------------------------\n"
                       f"Updated:      {updated_at}\n"
+                      "Database:      "urls_full.txt" dump\n"
                       "Maintainer:   github.com/genquiky\n"
                       "Expires:        every 8 hours\n"
                       "=================================="
