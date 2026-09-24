@@ -98,10 +98,10 @@ jobs:
                   "name": "URLhaus Malware Blocklist",
                   "description": (
                       "==================================\n"
-                      "URLhaus Active Malware Blocklist\n"
+                      "URLhaus 'Active' Malware Blocklist\n"
                       "----------------------------------------------\n"
                       f"Updated:      {updated_at}\n"
-                      "Database:      "urls_online.txt" dump\n"
+                      "Database:      'urls_online.txt' dump\n"
                       "Maintainer:   github.com/genquiky\n"
                       "Expires:        every 8 hours\n"
                       "=================================="
